@@ -1,0 +1,67 @@
+package dog.snow.androidrecruittest.DI.Splash
+
+import dagger.Module
+import dagger.Provides
+import dog.snow.androidrecruittest.retrofit.service.AlbumService
+import dog.snow.androidrecruittest.retrofit.service.PhotoService
+import dog.snow.androidrecruittest.retrofit.service.UserService
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+
+@Module
+class Splash_Module {
+
+    @Provides
+    fun makeClient() : OkHttpClient
+    {
+       val httpclient = OkHttpClient.Builder()
+        httpclient.addInterceptor(object : Interceptor
+        {
+            override fun intercept(chain: Interceptor.Chain): Response {
+                var original = chain.request()
+               var request = original.newBuilder()
+                   .addHeader("User-Agent", "Android Recruit Test")
+                    .method(original.method(), original.body())
+                    .build();
+                return chain.proceed(request)
+            }
+
+        })
+val client= httpclient.build()
+return  client
+    }
+
+
+    @Provides
+    fun provideRetrofitInstance(client: OkHttpClient) : Retrofit
+    {
+        return  Retrofit.Builder()
+            .baseUrl("https://jsonplaceholder.typicode.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(client)
+            .build()
+    }
+
+    @Provides
+    fun provide_Photo_Service(retrofit : Retrofit) : PhotoService
+    {
+        return retrofit.create(PhotoService::class.java)
+    }
+    @Provides
+    fun provide_Album_Service(retrofit : Retrofit) : AlbumService
+    {
+        return retrofit.create(AlbumService::class.java)
+    }
+    @Provides
+    fun provide_User_Service(retrofit : Retrofit) : UserService
+    {
+        return retrofit.create(UserService::class.java)
+    }
+
+
+}

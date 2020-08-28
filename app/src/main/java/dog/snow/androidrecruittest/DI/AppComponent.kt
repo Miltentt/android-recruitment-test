@@ -6,11 +6,12 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dog.snow.androidrecruittest.BaseApplication
+import dog.snow.androidrecruittest.DI.Splash.Splash_Module
 import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = arrayOf(AndroidSupportInjectionModule::class)
+    modules = arrayOf(AndroidSupportInjectionModule::class,ActivityBuildersModule::class,Splash_Module::class)
 )
 interface AppComponent : AndroidInjector<BaseApplication> {
     @Component.Builder
