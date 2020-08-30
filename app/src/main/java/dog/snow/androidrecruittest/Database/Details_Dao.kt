@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dog.snow.androidrecruittest.ui.model.Detail
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 @Dao
@@ -18,7 +19,7 @@ import io.reactivex.Single
     fun loadDetail(id : Int) : Single<Detail>
 
     @Query("SELECT * FROM Detail ")
-    fun loadAllDetails() : Flowable<List<Detail>>
+    fun loadAllDetails() : Observable<List<Detail>>
 
 
 }

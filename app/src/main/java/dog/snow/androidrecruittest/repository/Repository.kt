@@ -47,6 +47,8 @@ class Repository @Inject constructor(val photoService: PhotoService, val albumSe
             { photos: RawPhoto, albums: RawAlbum, users: RawUser ->
                 Detail_Model(photos, albums, users)
             })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun insertIntoDatabase(details : ArrayList<Detail>) : Completable

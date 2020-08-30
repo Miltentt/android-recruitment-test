@@ -36,7 +36,7 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
         splashViewmodel.getEverything()
             .subscribe(
                 {detail -> splashViewmodel.addDetails(detail)},
-                {showError("cant download the data")},
+                {showError("Cant download the data")},
                 {insertDatabase()})
 
 

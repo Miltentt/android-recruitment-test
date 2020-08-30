@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dog.snow.androidrecruittest.R
+import dog.snow.androidrecruittest.ui.model.Detail
 import dog.snow.androidrecruittest.ui.model.ListItem
 
-class ListAdapter(private val onClick: (item: ListItem, position: Int, view: View) -> Unit) :
-    androidx.recyclerview.widget.ListAdapter<ListItem, ListAdapter.ViewHolder>(DIFF_CALLBACK) {
+class ListAdapter(private val onClick: (item: Detail, position: Int, view: View) -> Unit) :
+    androidx.recyclerview.widget.ListAdapter<Detail, ListAdapter.ViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
@@ -23,26 +24,27 @@ class ListAdapter(private val onClick: (item: ListItem, position: Int, view: Vie
 
     class ViewHolder(
         itemView: View,
-        private val onClick: (item: ListItem, position: Int, view: View) -> Unit
+        private val onClick: (item: Detail, position: Int, view: View) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
-        fun bind(item: ListItem) = with(itemView) {
+        fun bind(item: Detail) = with(itemView) {
             val ivThumb: ImageView = findViewById(R.id.iv_thumb)
             val tvTitle: TextView = findViewById(R.id.tv_photo_title)
             val tvAlbumTitle: TextView = findViewById(R.id.tv_album_title)
-            tvTitle.text = item.title
+            tvTitle.text = item.photoTitle
             tvAlbumTitle.text = item.albumTitle
             //TODO: display item.thumbnailUrl in ivThumb
             setOnClickListener { onClick(item, adapterPosition, this) }
         }
     }
 
+
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListItem>() {
-            override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Detail>() {
+            override fun areItemsTheSame(oldItem: Detail, newItem: Detail): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean =
+            override fun areContentsTheSame(oldItem: Detail, newItem: Detail): Boolean =
                 oldItem == newItem
         }
     }
