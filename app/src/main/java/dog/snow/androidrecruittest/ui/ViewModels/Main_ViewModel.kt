@@ -13,13 +13,14 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import androidx.lifecycle.ViewModel as ViewModel1
 
 class Main_ViewModel @Inject constructor(val mainRepository: Main_Repository, val timerClass: Timer_Class) : ViewModel1() {
 
+    private var disposable = CompositeDisposable()
     private  var livedataa : MutableLiveData<List<Detail>> = MutableLiveData()
-
 
     fun getLiveData() : LiveData<List<Detail>>
 {
@@ -29,8 +30,8 @@ class Main_ViewModel @Inject constructor(val mainRepository: Main_Repository, va
 
 fun getDetails(query : String)
 {
-    mainRepository.loadDetails(query)
-        .subscribe({livedataa.apply{ value = it}},{Log.i("Database query","Something went wrong with Database query")})
+    disposable.add(mainRepository.loadDetails(query)
+        .subscribe({livedataa.apply{ value = it}},{Log.i("Database query","Something went wrong with Database query")}))
 
 }
     fun timerStart()
@@ -46,5 +47,8 @@ fun getDetails(query : String)
         return timerClass.returnTimerLiveData()
     }
 
-
+    override fun onCleared() {
+        disposable.clear()
+        super.onCleared()
+    }
 }

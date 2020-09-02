@@ -21,11 +21,13 @@ import dog.snow.androidrecruittest.ui.ListFragment
 import dog.snow.androidrecruittest.ui.ViewModels.Main_ViewModel
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.layout_banner.*
 import kotlinx.android.synthetic.main.main_activity.*
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
+    var disposables = CompositeDisposable()
     @Inject
     lateinit var viewModelsProviderFactory: ViewModelsProviderFactory
 
@@ -69,20 +71,25 @@ class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
         when(boolean) {
             false -> {
                 mainVewmodel.timerStart();
-                Completable.fromAction({ banner.visibility = View.VISIBLE })
+              disposables.add(  Completable.fromAction({ banner.visibility = View.VISIBLE })
                     .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
+                    .subscribe())
             }
             true ->
             {
                 mainVewmodel.timerCancel()
-                Completable.fromAction({banner.visibility =View.GONE})
+              disposables.add(  Completable.fromAction({banner.visibility =View.GONE})
                     .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
+                    .subscribe())
             }
         }
     }
 
+
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
+    }
 }
 
 

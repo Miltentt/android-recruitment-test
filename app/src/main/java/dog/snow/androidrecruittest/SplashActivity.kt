@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerAppCompatActivity
 import dog.snow.androidrecruittest.DI.ViewModelsProviderFactory
 import dog.snow.androidrecruittest.ui.ViewModels.Splash_ViewModel
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.layout_progressbar.*
 import kotlinx.android.synthetic.main.splash_activity.*
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
     @Inject
      lateinit var viewModelsProviderFactory: ViewModelsProviderFactory
     private lateinit var splashViewmodel: Splash_ViewModel
-
+    var disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,29 +53,31 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
 
     private fun makeAPICall()
     {
-        splashViewmodel.getEverything()
+       disposables.add(splashViewmodel.getEverything()
             .subscribe(
                 {splashViewmodel.populateList(it)},
                 {checkIfDatabaseEmpty()},
-                {insertDatabase();})
+                {insertDatabase();}))
 
 
     }
     private fun insertDatabase()
     {
-        splashViewmodel.insertIntoDatabase().subscribe(
+       disposables.add(splashViewmodel.insertIntoDatabase().subscribe(
             {startActivity(Intent(this,MainActivity::class.java))},
-            {showError("Database Error")})
+            {showError("Database Error")}))
     }
     private fun checkIfDatabaseEmpty()
     {
-        splashViewmodel.checkIfDatabaseEmpty()
-            .subscribe({if(it.isEmpty()) showError("No local data, Please turn on the internet connection") else startActivity(Intent(this,MainActivity::class.java))})
+       disposables.add( splashViewmodel.checkIfDatabaseEmpty()
+            .subscribe({
+                if(it.isEmpty()) showError("No local data, Please turn on the internet connection")
+                else startActivity(Intent(this,MainActivity::class.java))}))
 
     }
 
-
-
-
-
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
+    }
 }

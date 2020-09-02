@@ -11,11 +11,13 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
 class Splash_ViewModel @Inject constructor(val repository: Repository) : ViewModel() {
 
+    private var disposable = CompositeDisposable()
     private var details = ArrayList<Detail>()
 
      fun getEverything() : Flowable<Detail>
@@ -40,18 +42,14 @@ class Splash_ViewModel @Inject constructor(val repository: Repository) : ViewMod
 
     fun deleteDB()
     {
-        repository.deleteDB().subscribe()
+       disposable.add(repository.deleteDB().subscribe())
     }
 
-
-
-
-
-
-
-
-
+    override fun onCleared() {
+        disposable.clear()
+        super.onCleared()
     }
+}
 
 
 
