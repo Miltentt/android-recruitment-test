@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import dog.snow.androidrecruittest.repository.Repository
 import dog.snow.androidrecruittest.ui.model.Detail
-import dog.snow.androidrecruittest.ui.model.Detail_Model
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable

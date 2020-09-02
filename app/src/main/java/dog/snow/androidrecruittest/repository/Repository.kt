@@ -10,7 +10,7 @@ import dog.snow.androidrecruittest.retrofit.service.AlbumService
 import dog.snow.androidrecruittest.retrofit.service.PhotoService
 import dog.snow.androidrecruittest.retrofit.service.UserService
 import dog.snow.androidrecruittest.ui.model.Detail
-import dog.snow.androidrecruittest.ui.model.Detail_Model
+
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
