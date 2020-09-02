@@ -17,6 +17,7 @@ import dog.snow.androidrecruittest.ui.ViewModels.Splash_ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.layout_progressbar.*
 import kotlinx.android.synthetic.main.splash_activity.*
+import java.util.*
 import javax.inject.Inject
 
 class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
@@ -28,11 +29,8 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         splashViewmodel = ViewModelProvider(this,viewModelsProviderFactory).get(Splash_ViewModel::class.java)
-        if(this.getSharedPreferences("default", Context.MODE_PRIVATE).getBoolean("outdated",false))
-        {
-            splashViewmodel.deleteDB()
-            this.getSharedPreferences("default",Context.MODE_PRIVATE).edit().remove("outdated").apply();
-        }
+        splashViewmodel.calculateTime(this.getSharedPreferences("default", Context.MODE_PRIVATE).getLong("date",-1)).observe({lifecycle},
+            {if(it) splashViewmodel.deleteDB()})
         makeAPICall()
         iv_logo_sd_symbol.startAnimation(AnimationUtils.loadAnimation(this,R.anim.bounce))
         iv_logo_sd_text.startAnimation(AnimationUtils.loadAnimation(this,R.anim.bounce))
@@ -57,22 +55,23 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
             .subscribe(
                 {splashViewmodel.populateList(it)},
                 {checkIfDatabaseEmpty()},
-                {insertDatabase();}))
+                {insertDatabase()}))
 
 
     }
     private fun insertDatabase()
     {
        disposables.add(splashViewmodel.insertIntoDatabase().subscribe(
-            {startActivity(Intent(this,MainActivity::class.java))},
+            {startActivity(Intent(this,MainActivity::class.java))
+             this.getSharedPreferences("default", Context.MODE_PRIVATE).edit().putLong("date", Calendar.getInstance().timeInMillis).apply()},
             {showError("Database Error")}))
     }
     private fun checkIfDatabaseEmpty()
     {
        disposables.add( splashViewmodel.checkIfDatabaseEmpty()
-            .subscribe({
+            .subscribe{
                 if(it.isEmpty()) showError("No local data, Please turn on the internet connection")
-                else startActivity(Intent(this,MainActivity::class.java))}))
+                else startActivity(Intent(this,MainActivity::class.java))})
 
     }
 

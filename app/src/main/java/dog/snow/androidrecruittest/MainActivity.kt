@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.support.DaggerAppCompatActivity
 import dog.snow.androidrecruittest.DI.ViewModelsProviderFactory
-import dog.snow.androidrecruittest.Util.Timer_Class
 import dog.snow.androidrecruittest.repository.Main_Repository
 import dog.snow.androidrecruittest.ui.ListFragment
 import dog.snow.androidrecruittest.ui.ViewModels.Main_ViewModel
@@ -24,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.layout_banner.*
 import kotlinx.android.synthetic.main.main_activity.*
+import java.util.*
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
@@ -38,10 +38,6 @@ class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(findViewById(R.id.toolbar))
         mainVewmodel = ViewModelProvider(this, viewModelsProviderFactory).get(Main_ViewModel::class.java)
-        mainVewmodel.returnTimerLiveData().observe({ lifecycle },
-            {
-                if (it) this.getSharedPreferences("default", Context.MODE_PRIVATE).edit().putBoolean("outdated", true).apply()
-            })
     setupConnectivityManager()
 
     }
@@ -70,14 +66,12 @@ class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
     {
         when(boolean) {
             false -> {
-                mainVewmodel.timerStart();
               disposables.add(  Completable.fromAction({ banner.visibility = View.VISIBLE })
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe())
             }
             true ->
             {
-                mainVewmodel.timerCancel()
               disposables.add(  Completable.fromAction({banner.visibility =View.GONE})
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe())

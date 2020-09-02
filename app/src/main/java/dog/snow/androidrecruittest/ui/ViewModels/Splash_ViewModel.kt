@@ -2,6 +2,8 @@ package dog.snow.androidrecruittest.ui.ViewModels
 
 import android.graphics.ColorSpace
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import dog.snow.androidrecruittest.repository.Repository
@@ -12,14 +14,16 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class Splash_ViewModel @Inject constructor(val repository: Repository) : ViewModel() {
 
     private var disposable = CompositeDisposable()
     private var details = ArrayList<Detail>()
-
+    private var outdatedLiveData = MutableLiveData<Boolean>()
      fun getEverything() : Flowable<Detail>
      {
       return repository.getEverything()
@@ -48,6 +52,13 @@ class Splash_ViewModel @Inject constructor(val repository: Repository) : ViewMod
     override fun onCleared() {
         disposable.clear()
         super.onCleared()
+    }
+
+    fun calculateTime(creationTime : Long) : LiveData<Boolean>
+    {
+        if(Calendar.getInstance().timeInMillis-creationTime>600000 && creationTime!=-1L)
+            outdatedLiveData.value=true
+        return outdatedLiveData
     }
 }
 
