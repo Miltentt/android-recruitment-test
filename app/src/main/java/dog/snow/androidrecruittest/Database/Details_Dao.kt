@@ -1,11 +1,9 @@
 package dog.snow.androidrecruittest.Database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.annotation.NonNull
+import androidx.room.*
 import dog.snow.androidrecruittest.ui.model.Detail
-import io.reactivex.Flowable
+
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -13,13 +11,17 @@ import io.reactivex.Single
  interface Details_Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     @Throws(IllegalArgumentException::class)
-    fun insertUsers(  detail : ArrayList<Detail>)
+    fun insertDetails(  detail : ArrayList<Detail>)
 
-    @Query("SELECT * FROM Detail WHERE id LIKE :id")
-    fun loadDetail(id : Int) : Single<Detail>
 
-    @Query("SELECT * FROM Detail ")
+    @Query("SELECT * FROM Detail WHERE albumTitle LIKE :query OR photoTitle LIKE :query")
+    fun loadAllDetails(query : String) : Observable<List<Detail>>
+
+    @Query("SELECT * FROM Detail")
     fun loadAllDetails() : Observable<List<Detail>>
+   @Query("DELETE FROM Detail")
+   fun nukeTable()
+
 
 
 }

@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dog.snow.androidrecruittest.repository.model.RawPhoto
 import kotlinx.android.parcel.Parcelize
-
+@Parcelize
 @Entity
 data class Detail(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val id : Int =0,
     val photoId: Int,
     val photoTitle: String,
@@ -17,4 +17,4 @@ data class Detail(
     var email: String="",
     var phone: String="",
     val url: String
-)
+) : Parcelable
