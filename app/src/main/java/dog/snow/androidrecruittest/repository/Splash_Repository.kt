@@ -21,7 +21,7 @@ import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class Repository @Inject constructor(val photoService: PhotoService, val albumService: AlbumService, val userService: UserService,val detailsDao: Details_Dao,private val detailsDatabase: Details_Database) {
+class Splash_Repository @Inject constructor(val photoService: PhotoService, val albumService: AlbumService, val userService: UserService,val detailsDao: Details_Dao,private val detailsDatabase: Details_Database) {
 
     private var i :Int = 0
     fun getPhotos() : Flowable<RawPhoto>

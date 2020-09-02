@@ -27,7 +27,7 @@ import java.util.*
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
-    var disposables = CompositeDisposable()
+    private var disposables = CompositeDisposable()
     @Inject
     lateinit var viewModelsProviderFactory: ViewModelsProviderFactory
 
@@ -43,7 +43,7 @@ class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun setupConnectivityManager()
+   private fun setupConnectivityManager()
     {
         val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if(connectivityManager?.activeNetworkInfo?.isAvailable==null)
@@ -62,7 +62,7 @@ class MainActivity : DaggerAppCompatActivity(R.layout.main_activity) {
         })
     }
 
-    fun offlineMode(boolean: Boolean)
+   private fun offlineMode(boolean: Boolean)
     {
         when(boolean) {
             false -> {

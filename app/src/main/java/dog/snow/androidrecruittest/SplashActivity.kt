@@ -25,7 +25,7 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
     @Inject
      lateinit var viewModelsProviderFactory: ViewModelsProviderFactory
     private lateinit var splashViewmodel: Splash_ViewModel
-    var disposables = CompositeDisposable()
+    private var disposables = CompositeDisposable()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +78,7 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
 
     }
 
-    fun startActivity()
+   private fun startActivity()
     {
         val intent = Intent(this,MainActivity::class.java)
         finish()

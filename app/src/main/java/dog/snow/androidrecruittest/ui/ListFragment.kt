@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 class ListFragment : DaggerFragment(R.layout.list_fragment)
 {
-    var listadapter : ListAdapter = ListAdapter({item ->onClick(item)})
+   private var listadapter : ListAdapter = ListAdapter({item ->onClick(item)})
 
     @Inject
     lateinit var viewModelsProviderFactory: ViewModelsProviderFactory

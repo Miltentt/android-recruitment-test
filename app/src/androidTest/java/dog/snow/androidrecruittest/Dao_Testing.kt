@@ -34,6 +34,7 @@ class Dao_Testing : Database_Test() {
     @Test
     fun insertDeleteCheckIfEmpty()
     {
+        //Arrange
         var list = ArrayList<Detail>()
         var detail1 = Detail(0,1,"title","albumtitle","bob","xxx@x","89867878789","www.dsa.diks")
         var detail2 = Detail(1,0,"uio","hhh","bobb","xxmx@x","898678vbn78789","www.dsauu.diks")
@@ -47,6 +48,8 @@ class Dao_Testing : Database_Test() {
         getDao().nukeTable()
         Thread.sleep(2000)
         getDao().loadAllDetails().subscribe(subscriber)
+
+        //Assert
         subscriber.assertNoValues()
 
     }

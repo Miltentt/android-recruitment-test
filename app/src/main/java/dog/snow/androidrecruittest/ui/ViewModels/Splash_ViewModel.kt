@@ -6,7 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import dog.snow.androidrecruittest.repository.Repository
+
+import dog.snow.androidrecruittest.repository.Splash_Repository
 import dog.snow.androidrecruittest.ui.model.Detail
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -18,7 +19,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
-class Splash_ViewModel @Inject constructor(val repository: Repository) : ViewModel() {
+class Splash_ViewModel @Inject constructor(val repository: Splash_Repository) : ViewModel() {
 
     private var disposable = CompositeDisposable()
     private var details = ArrayList<Detail>()

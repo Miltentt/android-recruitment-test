@@ -2,6 +2,9 @@ package dog.snow.androidrecruittest.DI.Splash
 
 import dagger.Module
 import dagger.Provides
+import dog.snow.androidrecruittest.Database.Details_Dao
+import dog.snow.androidrecruittest.Database.Details_Database
+import dog.snow.androidrecruittest.repository.Splash_Repository
 import dog.snow.androidrecruittest.retrofit.service.AlbumService
 import dog.snow.androidrecruittest.retrofit.service.PhotoService
 import dog.snow.androidrecruittest.retrofit.service.UserService
@@ -19,19 +22,15 @@ class Splash_Module {
     fun makeClient() : OkHttpClient
     {
        val httpclient = OkHttpClient.Builder()
-        httpclient.addInterceptor(object : Interceptor
-        {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                var original = chain.request()
-               var request = original.newBuilder()
-                   .addHeader("User-Agent", "Android Recruit Test")
-                    .method(original.method(), original.body())
-                    .build();
-                return chain.proceed(request)
-            }
-
-        })
-val client= httpclient.build()
+        httpclient.addInterceptor { chain ->
+            var original = chain.request()
+            var request = original.newBuilder()
+                .addHeader("User-Agent", "Android Recruit Test")
+                .method(original.method(), original.body())
+                .build();
+            chain.proceed(request)
+        }
+        val client= httpclient.build()
 return  client
     }
 
@@ -62,6 +61,10 @@ return  client
     {
         return retrofit.create(UserService::class.java)
     }
-
+    @Provides
+    fun provide_Splash_Repository(photoService: PhotoService,albumService: AlbumService,userService: UserService,detailsDatabase: Details_Database,detailsDao: Details_Dao ) : Splash_Repository
+    {
+        return Splash_Repository(photoService,albumService,userService,detailsDao,detailsDatabase)
+    }
 
 }
