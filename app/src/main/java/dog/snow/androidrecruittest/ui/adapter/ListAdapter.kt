@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import dog.snow.androidrecruittest.R
 import dog.snow.androidrecruittest.ui.model.Detail
@@ -38,7 +39,9 @@ class ListAdapter(private val onClick: (item: Detail) -> Unit) :
             val tvAlbumTitle: TextView = findViewById(R.id.tv_album_title)
             tvTitle.text = item.photoTitle
             tvAlbumTitle.text = item.albumTitle
-            Picasso.get().load(item.url).into(ivThumb)
+            Picasso.get().load(item.url).
+            placeholder(R.drawable.ic_placeholder)
+                .into(ivThumb);
             setOnClickListener { onClick(item) }
 
         }

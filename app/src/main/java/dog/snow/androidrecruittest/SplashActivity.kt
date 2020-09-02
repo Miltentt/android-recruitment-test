@@ -2,6 +2,7 @@ package dog.snow.androidrecruittest
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,7 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
     private lateinit var splashViewmodel: Splash_ViewModel
     var disposables = CompositeDisposable()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         splashViewmodel = ViewModelProvider(this,viewModelsProviderFactory).get(Splash_ViewModel::class.java)
@@ -34,6 +36,7 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
         makeAPICall()
         iv_logo_sd_symbol.startAnimation(AnimationUtils.loadAnimation(this,R.anim.bounce))
         iv_logo_sd_text.startAnimation(AnimationUtils.loadAnimation(this,R.anim.bounce))
+
     }
 
 
@@ -62,7 +65,7 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
     private fun insertDatabase()
     {
        disposables.add(splashViewmodel.insertIntoDatabase().subscribe(
-            {startActivity(Intent(this,MainActivity::class.java))
+            {startActivity()
              this.getSharedPreferences("default", Context.MODE_PRIVATE).edit().putLong("date", Calendar.getInstance().timeInMillis).apply()},
             {showError("Database Error")}))
     }
@@ -71,7 +74,15 @@ class SplashActivity : DaggerAppCompatActivity(R.layout.splash_activity) {
        disposables.add( splashViewmodel.checkIfDatabaseEmpty()
             .subscribe{
                 if(it.isEmpty()) showError("No local data, Please turn on the internet connection")
-                else startActivity(Intent(this,MainActivity::class.java))})
+                else startActivity()})
+
+    }
+
+    fun startActivity()
+    {
+        val intent = Intent(this,MainActivity::class.java)
+        finish()
+        startActivity(intent)
 
     }
 

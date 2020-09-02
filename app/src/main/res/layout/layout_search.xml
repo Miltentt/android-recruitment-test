@@ -9,6 +9,7 @@
     android:layout_marginTop="@dimen/spacing_normal"
     android:layout_marginEnd="@dimen/margin_normal"
     android:layout_marginBottom="@dimen/margin_normal"
+    android:backgroundTint="@color/light_primary_color"
     android:hint="@string/search_hint"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_scrollFlags="scroll|enterAlwaysCollapsed">

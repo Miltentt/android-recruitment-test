@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,8 +28,11 @@ import dog.snow.androidrecruittest.ui.model.Detail
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.details_fragment.*
+import kotlinx.android.synthetic.main.layout_appbar.*
 import kotlinx.android.synthetic.main.layout_empty_view.*
 import kotlinx.android.synthetic.main.layout_search.*
+import kotlinx.android.synthetic.main.layout_toolbar.*
+import kotlinx.android.synthetic.main.layout_toolbar.view.*
 import kotlinx.android.synthetic.main.list_fragment.*
 import kotlinx.android.synthetic.main.list_item.*
 import java.util.concurrent.TimeUnit
@@ -45,6 +49,7 @@ class ListFragment : DaggerFragment(R.layout.list_fragment)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainVewmodel = ViewModelProvider(this,viewModelsProviderFactory).get(Main_ViewModel::class.java)
+        initActionBar()
         initRecycler()
         initSearchView()
         mainVewmodel.getLiveData().observe({lifecycle}, {
@@ -81,7 +86,16 @@ class ListFragment : DaggerFragment(R.layout.list_fragment)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({mainVewmodel.getDetails(et_search.text.toString())})
     }
+    private fun initActionBar() {
+        (activity as MainActivity).apply {
+            appbar.isVisible = true
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            appbar.toolbar.titleMarginStart = resources.getDimensionPixelSize(R.dimen.margin_large)
+            appbar.setExpanded(true, true)
+            supportActionBar?.title = resources.getString(R.string.app_name)
 
+        }
+    }
     }
 
 
