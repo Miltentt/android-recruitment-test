@@ -9,8 +9,9 @@
 
     <ImageView
         android:id="@+id/iv_thumb"
-        android:layout_width="@dimen/thumb_size"
+        android:layout_width="0dp"
         android:layout_height="@dimen/thumb_size"
+        app:layout_constraintDimensionRatio="16:9"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
         android:src="?attr/colorPrimary"
